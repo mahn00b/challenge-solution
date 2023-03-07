@@ -72,7 +72,9 @@ function main() {
 
   const avgYear = (sumOfSeniorityLevel / 50).toFixed(1);
 
-  const cohorts = new Array(9).fill(null).map(() => ({
+  const cohorts = new Array(9).fill(null).map((_, index) => ({
+    // Not a functional requirement but realistically each one would have a unique identifier
+    id: index,
     avgSeniority: 0,
     majorsRepresented: {},
     studentIds: []
