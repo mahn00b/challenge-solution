@@ -1,0 +1,50 @@
+ID,First,Last,Years until Graduation,Major
+1,Jazmeen,Wu,1,Biology
+2,Hilda,Wong,1.5,English
+3,Makinde,Braut,3,Comparative Literature
+4,Michelle,Lang,2,History
+5,Pierre,Sukhani,2,Physics
+6,Bodu,Wilkinson,2,General Education
+7,Jazmeen,Bonaparte,3.5,Computer Science
+8,David,Herbst,0.5,Math
+9,John,Gauss,3.5,Applied Math
+10,Jamie,Lang,3,Gender Studies
+11,Chiang,Dupont,3,Italian
+12,Yancy,Johnson,1.5,Russian
+13,Elena,Ramirez,1,Biology
+14,Jose,Herbst,3,English
+15,Abdul,Davidson,1,Comparative Literature
+16,Jose,Kim,1,History
+17,Natasha,Kim,2,Physics
+18,Wing,Wilkinson,1,General Education
+19,Hilda,Ramirez,1,Computer Science
+20,Wing,Sukhani,1,Math
+21,Chiang,Smith,0.5,Applied Math
+22,Lana,Gauss,0.5,Gender Studies
+23,Hans,Bonaparte,1.5,Italian
+24,Hans,Johnson,0.5,Russian
+25,Yancy,Gonzales,3.5,Biology
+26,Herman,Wu,2.5,English
+27,Michelle,Gonzales,3,Comparative Literature
+28,Chiang,Herbst,1.5,History
+29,Abdul,Wu,0.5,Physics
+30,Lana,Wong,3,General Education
+31,Herman,Mohader,3,Computer Science
+32,Bodu,Jones,2.5,Math
+33,Abdul,Wong,2,Applied Math
+34,Elena,Braut,3,Gender Studies
+35,Xiao,Gonzales,1.5,Italian
+36,David,Mohader,2,Russian
+37,Xiao,Smith,0.5,Biology
+38,Natasha,Gauss,1.5,Biology
+39,Pierre,Ramirez,1,English
+40,Makinde,Davidson,2,Comparative Literature
+41,David,Sukhani,0.5,History
+42,John,Dupont,3,Physics
+43,Elena,Liu,2,General Education
+44,Bodu,Jones,3.5,Computer Science
+45,Hans,Tanna,2,Math
+46,Jamie,Liu,2,Applied Math
+47,Wing,Tanna,3,Gender Studies
+48,Xiao,Liu,1.5,Italian
+49,Makinde,Dupont,3,Russian
