@@ -3,17 +3,21 @@ const path = require('path');
 
 const STUDENTS_DATA_PATH = path.join(__dirname, './data/students.csv')
 const COHORT_MAX_STUDENTS = 8;
-const COHORT_MIN_STUDENTS = 4;
 
 function readStudents() {
   const buffer = fs.readFileSync(STUDENTS_DATA_PATH)
 
   const [headers, ...data] = buffer.toString().split(/[\r]?\n/gi)
 
-  return {
-    headers: headers.split(','),
-    data: data.map((s) => s.split(','))
-  }
+  return data.map((raw) => {
+    const student = raw.split(',')
+
+    return headers.toLowerCase().replace('years until graduation', 'seniority').split(',').reduce((acc, e, index) => {
+      console.log(acc, e, index)
+      acc[e] = student[index];
+      return acc;
+    }, {})
+  });
 }
 
 // Factory function that generates a sorting function based on the avgYear
@@ -54,23 +58,21 @@ function addNewValueToAverage(currentAvg, currentQuantity, newAverage) {
 }
 
 function addStudentToCohort(cohort, student) {
-  const id = student[0]
-  const seniority = parseFloat(student[3])
-  const major = student[4]
+  const seniority = parseFloat(student.seniority)
 
   const numStudents = cohort.studentIds.length;
 
   cohort.avgSeniority = addNewValueToAverage(cohort.avgSeniority, numStudents, seniority)
-  cohort.studentIds.push(id)
-  cohort.majorsRepresented[major] = true;
+  cohort.studentIds.push(student.id)
+  cohort.majorsRepresented[student.major] = true;
 }
 
 function main() {
   const students = readStudents();
 
-  const sumOfSeniorityLevel = students.data.reduce((acc, e) => (acc + parseFloat(e[3])), 0)
+  const sumOfSeniorityLevel = students.reduce((acc, e) => (acc + parseFloat(e.seniority)), 0)
 
-  const avgYear = (sumOfSeniorityLevel / 50).toFixed(1);
+  const avgYear = (sumOfSeniorityLevel / students.length).toFixed(1);
 
   const cohorts = new Array(9).fill(null).map((_, index) => ({
     // Not a functional requirement but realistically each one would have a unique identifier
@@ -82,10 +84,10 @@ function main() {
 
   const compareCohorts = generateComparer(avgYear);
 
-  for (let i = 0; i < students.data.length; i++) {
-    const student = students.data[i]
-    const seniority = parseFloat(student[3])
-    const major = student[4];
+  for (let i = 0; i < students.length; i++) {
+    const student = students[i]
+    const seniority = parseFloat(student.seniority)
+    const major = student.major;
 
     for (let k = 0; k < cohorts.length; k++) {
       const {
