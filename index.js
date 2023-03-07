@@ -16,32 +16,61 @@ function readStudents() {
   }
 }
 
-function divideCohorts() {
+// Factory function that generates a sorting function based on the avgYear
+function generateComparer(avgYear){
+  return (a, b) => {
+    const { studentIds: aIds, avgSeniority: avgA } = a
+    const { studentIds: bIds, avgSeniority: avgB } = b
+    // returns the one with the least Ids
+    const diffInStudents = aIds.length - bIds.length;
 
+    // if they have the same number of students
+    if (diffInStudents === 0) {
+      const distanceA = Math.abs(avgYear - avgA);
+      const distanceB = Math.abs(avgYear - avgB);
+      // return the one with the distance furthest from the avg
+      return distanceB - distanceA
+    }
+
+    return diffInStudents
+  }
+}
+
+function doesImproveAverage(seniority, avgSeniority, avgYear) {
+  // If the student's level of seniority improves the distance from the avg
+  if (
+    seniority > avgSeniority && avgSeniority < avgYear ||
+    seniority > avgSeniority && avgSeniority > avgYear
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+function addNewValueToAverage(currentAvg, currentQuantity, newAverage) {
+  const previousTotal = currentAvg * currentQuantity;
+  return ((previousTotal + newAverage) / (currentQuantity + 1)).toFixed(1);
+}
+
+function addStudentToCohort(cohort, student) {
+  const id = student[0]
+  const seniority = parseFloat(student[3])
+  const major = student[4]
+
+  const numStudents = cohort.studentIds.length;
+
+  cohort.avgSeniority = addNewValueToAverage(cohort.avgSeniority, numStudents, seniority)
+  cohort.studentIds.push(id)
+  cohort.majorsRepresented[major] = true;
 }
 
 function main() {
   const students = readStudents();
 
-  const calcs = students.data.reduce((acc, e)=> {
-    const { seniority, tallies } = acc;
+  const sumOfSeniorityLevel = students.data.reduce((acc, e) => (acc + parseFloat(e[3])), 0)
 
-    const s = seniority + parseFloat(e[3])
-    tallies[e[4]] = tallies[e[4]] ? tallies[e[4]] + 1 : 1
-
-
-    return {
-      seniority: s,
-      tallies
-    }
-  }, {
-    seniority: 0,
-    tallies: {}
-  })
-
-// Get the avg level of seniority for all students
-const avgYear = (calcs.seniority / 50).toFixed(1);
-const majorTallies = calcs.tallies
+  const avgYear = (sumOfSeniorityLevel / 50).toFixed(1);
 
   const cohorts = new Array(9).fill(null).map(() => ({
     avgSeniority: 0,
@@ -49,7 +78,9 @@ const majorTallies = calcs.tallies
     studentIds: []
   }))
 
-  for(let i = 0; i < students.data.length; i++) {
+  const compareCohorts = generateComparer(avgYear);
+
+  for (let i = 0; i < students.data.length; i++) {
     const student = students.data[i]
     const seniority = parseFloat(student[3])
     const major = student[4];
@@ -63,46 +94,24 @@ const majorTallies = calcs.tallies
 
       if (studentIds.length === COHORT_MAX_STUDENTS) continue;
 
-      let closerToAverage = false;
-
-      if (seniority > avgSeniority && avgSeniority < avgYear ||
-        seniority > avgSeniority && avgSeniority < avgYear) {
-        closerToAverage = true;
-      }
-
-      if (!majorsRepresented[major] && closerToAverage) {
-        cohorts[k].avgSeniority = (( (avgSeniority * studentIds.length) + seniority ) / (studentIds.length + 1)).toFixed(1)
-        studentIds.push(i + 1)
-        majorsRepresented[major] = true;
+      if (!majorsRepresented[major] && doesImproveAverage(seniority, avgSeniority, avgYear)) {
+        addStudentToCohort(cohorts[k], student)
         break;
       }
 
       if (k === cohorts.length - 1) {
         // if none of the cohorts match the criteria, we automatically pick the first cohort because it's the one with the least students and the greater distance from the average.
         // we know this because it's sorted later
-        cohorts[0].avgSeniority = (( (avgSeniority * studentIds.length) + seniority ) / (studentIds.length + 1)).toFixed(1)
-        cohorts[0].studentIds.push(i + 1)
-        majorsRepresented[major] = true;
+        addStudentToCohort(cohorts[0], student)
       }
     }
 
-    cohorts.sort((a, b) => {
-      const { studentIds: aIds, avgSeniority: avgA } = a
-      const { studentIds: bIds, avgSeniority: avgB } = b
-
-      const diffInStudents = aIds.length - bIds.length;
-
-      if (diffInStudents === 0) {
-        const distanceA = Math.abs(avgYear - avgA);
-        const distanceB = Math.abs(avgYear - avgB);
-
-        return distanceB - distanceA
-      }
-
-      return diffInStudents
-    })
+    // Sort cohorts after every student insert.
+    cohorts.sort(compareCohorts);
   }
-  console.log(cohorts)
+
+  console.log(cohorts);
+  return cohorts;
 }
 
 main();
