@@ -73,7 +73,7 @@ In hindsight, there are several improvements we would make to this solution:
 Overall, the distribution was fairly even among the cohorts in terms of average seniority being between `1.9 and 2.0`. However, some of the cohorts tended to be leaning more towards the senior or junior side. Perhaps the improvements suggested in the section above would
 
 Below you'll find the results:
-
+```
 Cohort 1
 ----------
 Jazmeen Wu Biology 1
@@ -149,3 +149,4 @@ Yancy Johnson Russian 1.5
 Chiang Smith Applied Math 0.5
 Pierre Ramirez English 1
 Makinde Davidson Comparative Literature 2
+```
