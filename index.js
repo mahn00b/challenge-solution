@@ -13,7 +13,6 @@ function readStudents() {
     const student = raw.split(',')
 
     return headers.toLowerCase().replace('years until graduation', 'seniority').split(',').reduce((acc, e, index) => {
-      console.log(acc, e, index)
       acc[e] = student[index];
       return acc;
     }, {})
@@ -67,6 +66,24 @@ function addStudentToCohort(cohort, student) {
   cohort.majorsRepresented[student.major] = true;
 }
 
+function printCohorts(cohorts, students) {
+  for(let i = 0; i < cohorts.length; i++) {
+    const {
+      id,
+      studentIds
+    } = cohorts[i]
+
+    console.log(`\nCohort ${id + 1}`);
+    console.log('----------')
+
+    for (let j = 0; j < studentIds.length; j++) {
+      const student = students[parseInt(studentIds[j]) - 1];
+      console.log(student.first, student.last, student.major, student.seniority)
+    }
+
+  }
+}
+
 function main() {
   const students = readStudents();
 
@@ -114,7 +131,7 @@ function main() {
     cohorts.sort(compareCohorts);
   }
 
-  console.log(cohorts);
+  printCohorts(cohorts, students)
   return cohorts;
 }
 
